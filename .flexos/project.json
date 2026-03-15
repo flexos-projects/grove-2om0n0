@@ -1,8 +1,8 @@
 {
-  "name": "{{project_name}}",
-  "slug": "{{project_slug}}",
+  "name": "Grove",
+  "slug": "grove",
   "version": "0.1.0",
-  "themeColor": "#40916C",
-  "createdAt": "{{created_at}}",
+  "themeColor": "#10b981",
+  "createdAt": "2026-03-15T19:38:17.338Z",
   "status": "active"
 }

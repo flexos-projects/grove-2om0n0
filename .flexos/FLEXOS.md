@@ -1,40 +1,30 @@
-# {{project_name}}
+# Grove
 
-> Built with [FlexOS](https://flexos.dev) — the AI co-founder platform.
+A FlexOS project.
 
-## What Is This?
+## Structure
 
-This `.flexos/` folder contains everything about your project: vision, features, pages, flows, database schemas, design tokens, prototypes, and build plans. Every file is markdown with structured metadata.
+This `.flexos/` folder contains the complete project specification.
 
-## Folder Guide
+| Folder | Purpose |
+|--------|--------|
+| `docs/` | Core documents (000-008) and guides (100+) |
+| `vision/` | Vision and strategy specs |
+| `features/` | Feature specifications |
+| `pages/` | Page and route specs |
+| `flows/` | User flow specs |
+| `database/` | Data model specs |
+| `technical/` | Technical architecture specs |
+| `design/` | Design tokens and patterns |
+| `content/` | Seed data collections |
+| `assets/` | Asset registry |
+| `prototype/` | HTML prototypes |
+| `reference/` | External documentation |
+| `builds/` | Build lifecycle |
+| `spaces/` | Discussion spaces |
+| `commits/` | Auto-generated changelog |
+| `imports/` | Raw import landing zone |
 
-| Folder | What's Inside |
-|--------|--------------|
-| `docs/` | 9 core overview docs (000-008) + cross-cutting guides (100+) |
-| `vision/` | Goals, constraints, audience, brand identity |
-| `features/` | What the app does — one file per feature |
-| `pages/` | Routes, components, layouts, overlays |
-| `flows/` | User journeys, auth sequences, backend processes |
-| `database/` | Collection schemas, API integrations, client stores |
-| `design/` | Design tokens, CSS patterns, brand reference |
-| `technical/` | Stack decisions, integrations, infrastructure |
-| `content/` | Seed data collections (context/, mock-data/, etc.) |
-| `assets/` | Image, logo, font, video registry |
-| `prototype/` | Self-contained HTML previews + shared CSS |
-| `reference/` | SDK/framework documentation for the builder AI |
-| `builds/` | Build lifecycle — config, tasks, logs |
-| `spaces/` | Discussion sessions and changelogs |
-| `commits/` | Auto-generated changelog entries |
-| `imports/` | Raw imported content landing zone |
+## Prototype
 
-## How to Work
-
-1. **Talk to the AI** — describe what you want
-2. **Specs appear** — numbered files in the right folders
-3. **Core docs update** — holistic summaries regenerate
-4. **Prototypes generate** — visual HTML previews
-5. **Build executes** — AI produces production code
-
-## This Template
-
-Grove — an SMS concierge platform for boutique hotels. Guests text a number and get anything they need handled: reservations, recommendations, late checkout, room issues. AI handles simple requests instantly; complex ones route to staff through an operator dashboard. Dark, warm aesthetic inspired by natural materials and considered hospitality.
+Prototypes deploy to **grove.flexos.site** via GitHub Actions.
