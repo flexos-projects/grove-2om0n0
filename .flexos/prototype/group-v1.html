@@ -1,0 +1,445 @@
+<!--
+  Grove — Group Overview Prototype
+  Version: v1
+  Generated: 2026-03-15
+  Source spec: pages/021-route-group.md
+  Shared assets: prototype/shared/
+  Previous versions: none
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Overview — Grove</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/open-props/open-props.min.css">
+  <link rel="stylesheet" href="shared/tokens.css">
+  <link rel="stylesheet" href="shared/components.css">
+
+  <!-- Mock data -->
+  <script src="shared/mock-data-inline.js"></script>
+  <script src="shared/mock-data.js"></script>
+
+  <style>
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .sidebar-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--color-brand-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: var(--color-brand);
+      flex-shrink: 0;
+    }
+    .sidebar-user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-user-name {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-primary);
+    }
+    .sidebar-user-badge {
+      font-size: var(--text-xs);
+      color: var(--color-accent);
+    }
+
+    .topbar-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      color: var(--color-text-primary);
+    }
+    .topbar-meta {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin-left: var(--space-4);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .period-tabs {
+      display: flex;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .period-tab {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+      font-family: var(--font-ui);
+    }
+    .period-tab:hover { color: var(--color-text-primary); }
+    .period-tab.active {
+      background: var(--color-brand-muted);
+      color: var(--color-brand);
+    }
+
+    .content-inner {
+      max-width: var(--content-max);
+    }
+
+    .section-title {
+      font-size: var(--text-body);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    .table th {
+      cursor: pointer;
+      user-select: none;
+      transition: color var(--transition-fast);
+    }
+    .table th:hover {
+      color: var(--color-text-primary);
+    }
+    .table th .sort-icon {
+      display: inline-block;
+      margin-left: var(--space-1);
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+    }
+    .table th.sorted .sort-icon {
+      color: var(--color-brand);
+    }
+
+    .table tr {
+      cursor: pointer;
+    }
+
+    .property-name-cell {
+      font-weight: var(--weight-medium);
+    }
+
+    .ai-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .ai-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--color-surface-sunken);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      min-width: 60px;
+    }
+    .ai-bar-fill {
+      height: 100%;
+      background: var(--color-brand);
+      border-radius: var(--radius-full);
+      transition: width 0.4s var(--ease-out);
+    }
+    .ai-bar-label {
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      min-width: 36px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+<div id="app" class="app-layout">
+  <!-- Sidebar -->
+  <aside class="app-sidebar">
+    <div class="sidebar-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-brand)"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span>Grove</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a data-slug="inbox" href="inbox-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Inbox
+      </a>
+      <a data-slug="guests" href="guests-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Guests
+      </a>
+      <a data-slug="knowledge" href="knowledge-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Knowledge
+      </a>
+      <a data-slug="analytics" href="analytics-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        Analytics
+      </a>
+      <a data-slug="settings" href="settings-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+
+      <div class="sidebar-section-label">Group</div>
+      <a data-slug="group" href="group-v1.html" class="nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Group Overview
+      </a>
+      <a data-slug="group-properties" href="group-properties-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Properties
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="user-initials">AW</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="user-name">Anika Weber</div>
+          <div class="sidebar-user-badge">
+            <span class="badge badge-active" style="font-size:var(--text-xs)">Group</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="app-main">
+    <div class="app-topbar">
+      <span class="topbar-title">Group Overview</span>
+      <span class="topbar-meta" id="topbar-group-name"></span>
+    </div>
+    <div class="app-content">
+      <div class="content-inner">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title" id="group-name"></h1>
+            <div class="page-meta" id="group-meta"></div>
+          </div>
+          <div class="header-actions">
+            <div class="period-tabs">
+              <button class="period-tab" :class="{ active: period === '7d' }" @click="period = '7d'">7d</button>
+              <button class="period-tab" :class="{ active: period === '30d' }" @click="period = '30d'">30d</button>
+              <button class="period-tab" :class="{ active: period === '90d' }" @click="period = '90d'">90d</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="stats-bar"></div>
+
+        <!-- Property Comparison Table -->
+        <h3 class="section-title">Property Performance</h3>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th :class="{ sorted: sortColumn === 'name' }" @click="sortBy('name')">
+                  Property Name
+                  <span class="sort-icon">{{ sortColumn === 'name' ? (sortDirection === 'asc' ? '\u2191' : '\u2193') : '\u2195' }}</span>
+                </th>
+                <th :class="{ sorted: sortColumn === 'conversations' }" @click="sortBy('conversations')">
+                  Conversations
+                  <span class="sort-icon">{{ sortColumn === 'conversations' ? (sortDirection === 'asc' ? '\u2191' : '\u2193') : '\u2195' }}</span>
+                </th>
+                <th :class="{ sorted: sortColumn === 'avgResponseTime' }" @click="sortBy('avgResponseTime')">
+                  Avg Response Time
+                  <span class="sort-icon">{{ sortColumn === 'avgResponseTime' ? (sortDirection === 'asc' ? '\u2191' : '\u2193') : '\u2195' }}</span>
+                </th>
+                <th :class="{ sorted: sortColumn === 'aiHandled' }" @click="sortBy('aiHandled')">
+                  AI-Handled
+                  <span class="sort-icon">{{ sortColumn === 'aiHandled' ? (sortDirection === 'asc' ? '\u2191' : '\u2193') : '\u2195' }}</span>
+                </th>
+                <th :class="{ sorted: sortColumn === 'satisfaction' }" @click="sortBy('satisfaction')">
+                  Satisfaction
+                  <span class="sort-icon">{{ sortColumn === 'satisfaction' ? (sortDirection === 'asc' ? '\u2191' : '\u2193') : '\u2195' }}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="prop in sortedProperties" :key="prop.id" @click="drillDown(prop.id)">
+                <td class="property-name-cell">{{ prop.name }}</td>
+                <td>{{ prop.stats.conversations }}</td>
+                <td>{{ prop.stats.avgResponseTime }} min</td>
+                <td>
+                  <div class="ai-bar">
+                    <div class="ai-bar-track">
+                      <div class="ai-bar-fill" :style="{ width: prop.stats.aiHandled + '%' }"></div>
+                    </div>
+                    <span class="ai-bar-label">{{ prop.stats.aiHandled }}%</span>
+                  </div>
+                </td>
+                <td>{{ prop.stats.satisfaction }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Prototype label -->
+<div class="prototype-label">Group Overview v1</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+  const { createApp, ref, computed, onMounted } = Vue
+  const db = window.MOCK_DB
+
+  createApp({
+    setup() {
+      const period = ref('30d')
+      const sortColumn = ref('conversations')
+      const sortDirection = ref('desc')
+      const groupProperties = ref([])
+
+      // Get group data
+      const group = db.groups[0]
+      const groupId = group.id
+
+      function showToast(message, type) {
+        type = type || 'success'
+        const c = document.getElementById('toast-container')
+        if (!c) return
+        const t = document.createElement('div')
+        t.className = 'toast toast-' + type
+        t.textContent = message
+        c.appendChild(t)
+        setTimeout(function() { t.remove() }, 3000)
+      }
+
+      function sortBy(column) {
+        if (sortColumn.value === column) {
+          sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+        } else {
+          sortColumn.value = column
+          sortDirection.value = 'desc'
+        }
+      }
+
+      const sortedProperties = computed(function() {
+        return [...groupProperties.value].sort(function(a, b) {
+          var aVal, bVal
+          if (sortColumn.value === 'name') {
+            aVal = a.name.toLowerCase()
+            bVal = b.name.toLowerCase()
+            if (aVal < bVal) return sortDirection.value === 'asc' ? -1 : 1
+            if (aVal > bVal) return sortDirection.value === 'asc' ? 1 : -1
+            return 0
+          }
+          aVal = a.stats[sortColumn.value]
+          bVal = b.stats[sortColumn.value]
+          return sortDirection.value === 'asc' ? aVal - bVal : bVal - aVal
+        })
+      })
+
+      function drillDown(propertyId) {
+        showToast('Opening analytics for property...', 'info')
+        setTimeout(function() {
+          window.location.href = 'analytics-v1.html'
+        }, 600)
+      }
+
+      onMounted(function() {
+        // Set group name in topbar and header
+        document.getElementById('topbar-group-name').textContent = group.name
+        document.getElementById('group-name').textContent = group.name
+
+        // Get properties
+        var properties = db.helpers.getGroupProperties(groupId)
+        document.getElementById('group-meta').textContent = properties.length + (properties.length === 1 ? ' property' : ' properties') + ' in group'
+
+        // Build property data with stats
+        var propData = properties.map(function(p) {
+          var stats = db.helpers.getDashboardStats(p.id)
+          return {
+            id: p.id,
+            name: p.name,
+            stats: {
+              conversations: stats.totalConversations,
+              avgResponseTime: stats.avgResponseTimeMinutes.toFixed(1),
+              aiHandled: stats.aiHandledPercent,
+              satisfaction: stats.totalConversations > 0 ? '4.6' : '--',
+              guests: stats.totalGuests
+            }
+          }
+        })
+        groupProperties.value = propData
+
+        // Build stats bar
+        var totalProps = properties.length
+        var totalConvos = propData.reduce(function(sum, p) { return sum + p.stats.conversations }, 0)
+        var avgResponseTimes = propData.filter(function(p) { return p.stats.conversations > 0 })
+        var avgRT = avgResponseTimes.length > 0
+          ? (avgResponseTimes.reduce(function(sum, p) { return sum + parseFloat(p.stats.avgResponseTime) }, 0) / avgResponseTimes.length).toFixed(1)
+          : '0.0'
+        var totalAiHandled = propData.length > 0
+          ? Math.round(propData.reduce(function(sum, p) { return sum + p.stats.aiHandled }, 0) / propData.length)
+          : 0
+
+        var statsBar = document.getElementById('stats-bar')
+        statsBar.innerHTML = [
+          { label: 'Properties', value: totalProps, trend: null },
+          { label: 'Total Conversations', value: totalConvos.toLocaleString(), trend: '+12%' },
+          { label: 'Avg Response Time', value: avgRT + ' min', trend: '-8%' },
+          { label: 'AI-Handled', value: totalAiHandled + '%', trend: '+5%' }
+        ].map(function(s) {
+          var trendHtml = ''
+          if (s.trend) {
+            var isUp = s.trend.startsWith('+')
+            // For response time, down is good. For others, up is good.
+            var isGood = s.label === 'Avg Response Time' ? !isUp : isUp
+            trendHtml = '<div class="stat-trend ' + (isGood ? 'stat-trend-up' : 'stat-trend-down') + '">' + s.trend + ' vs prev period</div>'
+          }
+          return '<div class="stat-card">' +
+            '<div class="stat-label">' + s.label + '</div>' +
+            '<div class="stat-value">' + s.value + '</div>' +
+            trendHtml +
+            '</div>'
+        }).join('')
+      })
+
+      return {
+        period,
+        sortColumn,
+        sortDirection,
+        sortBy,
+        sortedProperties,
+        drillDown,
+        showToast
+      }
+    }
+  }).mount('#app')
+</script>
+<script>
+;(function() {
+  var isLocal = window.location.protocol === 'file:'
+  if (isLocal) return
+  document.querySelectorAll('a[data-slug]').forEach(function(link) {
+    link.href = '/preview/' + link.dataset.slug
+  })
+})()
+</script>
+</body>
+</html>

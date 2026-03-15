@@ -1,0 +1,327 @@
+<!--
+  Grove — Login Prototype
+  Version: v1
+  Generated: 2026-03-15
+  Source spec: pages/005-route-login.md
+  Shared assets: prototype/shared/
+  Previous versions: none
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In — Grove</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/open-props/open-props.min.css">
+  <link rel="stylesheet" href="shared/tokens.css">
+  <link rel="stylesheet" href="shared/components.css">
+
+  <!-- Mock data -->
+  <script src="shared/mock-data-inline.js"></script>
+  <script src="shared/mock-data.js"></script>
+
+  <style>
+    .auth-page {
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+    }
+
+    .auth-logo svg {
+      width: 32px;
+      height: 32px;
+      color: var(--color-brand);
+    }
+
+    .auth-logo span {
+      font-family: var(--font-display);
+      font-size: var(--text-h3);
+      color: var(--color-brand);
+    }
+
+    .auth-card h2 {
+      margin: 0 0 var(--space-2);
+    }
+
+    .auth-card .subtitle {
+      margin: 0 0 var(--space-6);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper .input {
+      padding-right: 44px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--color-text-tertiary);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color var(--transition-fast);
+    }
+
+    .password-toggle:hover {
+      color: var(--color-text-secondary);
+    }
+
+    .password-toggle svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      margin-top: calc(-1 * var(--space-2));
+      margin-bottom: var(--space-2);
+    }
+
+    .forgot-link a {
+      font-size: var(--text-small);
+      color: var(--color-brand);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .forgot-link a:hover {
+      color: var(--color-brand-hover);
+    }
+
+    .login-error {
+      text-align: center;
+      margin-bottom: var(--space-4);
+      padding: var(--space-3);
+      background: var(--color-danger-muted);
+      border: 1px solid var(--color-danger);
+      border-radius: var(--radius-md);
+      font-size: var(--text-small);
+      color: var(--color-danger);
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: var(--space-6);
+    }
+
+    .signup-link a {
+      color: var(--color-brand);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .signup-link a:hover {
+      color: var(--color-brand-hover);
+    }
+
+    /* Fade transition */
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity var(--transition-slow);
+    }
+    .fade-enter-from, .fade-leave-to {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <div id="app" class="auth-page">
+    <!-- Logo -->
+    <div class="auth-logo">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3c0 0-4 4-4 9s2 7 4 12c2-5 4-7 4-12S14 3 14 3z" fill="currentColor" opacity="0.3"/>
+        <path d="M14 6c0 0-6 5-6 11 0 3 1.5 5 3 6.5C12.5 22 14 19 14 19s1.5 3 3 4.5c1.5-1.5 3-3.5 3-6.5C20 11 14 6 14 6z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+      <span>Grove</span>
+    </div>
+
+    <!-- Login Card -->
+    <div class="auth-card">
+      <h2 class="text-h2">Welcome back</h2>
+      <p class="text-body text-secondary subtitle">Log in to your Grove dashboard</p>
+
+      <!-- Login Error -->
+      <div v-if="loginError" class="login-error">
+        {{ loginError }}
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input
+          class="input"
+          :class="{ error: formErrors.email }"
+          type="email"
+          v-model="email"
+          placeholder="you@hotel.com"
+          :disabled="isSubmitting"
+          @keydown.enter="handleLogin"
+        >
+        <span v-if="formErrors.email" class="form-error">{{ formErrors.email }}</span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="password-wrapper">
+          <input
+            class="input"
+            :class="{ error: formErrors.password }"
+            :type="showPassword ? 'text' : 'password'"
+            v-model="password"
+            placeholder="Enter your password"
+            :disabled="isSubmitting"
+            @keydown.enter="handleLogin"
+          >
+          <button
+            type="button"
+            class="password-toggle"
+            @click="showPassword = !showPassword"
+            :aria-label="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <!-- Eye icon (show) -->
+            <svg v-if="!showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <!-- Eye-off icon (hide) -->
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <span v-if="formErrors.password" class="form-error">{{ formErrors.password }}</span>
+      </div>
+
+      <!-- Forgot password link -->
+      <div class="forgot-link">
+        <a data-slug="forgot-password" href="forgot-password-v1.html">Forgot password?</a>
+      </div>
+
+      <!-- Submit -->
+      <button
+        class="btn btn-md btn-primary btn-block"
+        :class="{ 'btn-loading': isSubmitting }"
+        :disabled="isSubmitting"
+        @click="handleLogin"
+      >
+        <span v-if="!isSubmitting">Log In</span>
+        <span v-else>&nbsp;</span>
+      </button>
+
+      <!-- Signup link -->
+      <p class="text-small text-secondary signup-link">
+        Don't have an account? <a data-slug="signup" href="signup-v1.html">Sign up</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Prototype label -->
+  <div class="prototype-label">005 — Login</div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script>
+    const { createApp, ref, computed, onMounted, watch } = Vue
+    const db = window.MOCK_DB
+
+    createApp({
+      setup() {
+        const email = ref('')
+        const password = ref('')
+        const showPassword = ref(false)
+        const formErrors = ref({})
+        const loginError = ref('')
+        const isSubmitting = ref(false)
+
+        function validateLogin() {
+          const errors = {}
+          if (!email.value.trim()) errors.email = 'Email is required'
+          else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) errors.email = 'Enter a valid email address'
+          if (!password.value) errors.password = 'Password is required'
+          formErrors.value = errors
+          return Object.keys(errors).length === 0
+        }
+
+        async function handleLogin() {
+          loginError.value = ''
+          if (!validateLogin()) return
+          isSubmitting.value = true
+
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 1200))
+
+          // Check against MOCK_DB.currentUser
+          if (db && db.currentUser && email.value === db.currentUser.email) {
+            // Success — show toast then redirect
+            showToast('Logged in successfully', 'success')
+            setTimeout(function() {
+              window.location.href = 'inbox-v1.html'
+            }, 800)
+          } else {
+            isSubmitting.value = false
+            loginError.value = 'Invalid email or password. Please try again.'
+          }
+        }
+
+        function showToast(message, type) {
+          type = type || 'success'
+          const c = document.getElementById('toast-container')
+          if (!c) return
+          const t = document.createElement('div')
+          t.className = 'toast toast-' + type
+          t.textContent = message
+          c.appendChild(t)
+          setTimeout(function() { t.remove() }, 3000)
+        }
+
+        return {
+          email,
+          password,
+          showPassword,
+          formErrors,
+          loginError,
+          isSubmitting,
+          handleLogin,
+          showToast
+        }
+      }
+    }).mount('#app')
+  </script>
+<script>
+;(function() {
+  var isLocal = window.location.protocol === 'file:'
+  if (isLocal) return
+  document.querySelectorAll('a[data-slug]').forEach(function(link) {
+    link.href = '/preview/' + link.dataset.slug
+  })
+})()
+</script>
+</body>
+</html>

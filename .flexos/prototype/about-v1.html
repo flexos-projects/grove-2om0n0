@@ -1,0 +1,421 @@
+<!--
+  Grove — About Page Prototype
+  Version: v1
+  Generated: 2026-03-15
+  Source spec: pages/003-route-about.md
+  Shared assets: prototype/shared/
+  Previous versions: none
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Grove</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/open-props/open-props.min.css">
+  <link rel="stylesheet" href="shared/tokens.css">
+  <link rel="stylesheet" href="shared/components.css">
+
+  <!-- Mock data -->
+  <script src="shared/mock-data-inline.js"></script>
+  <script src="shared/mock-data.js"></script>
+
+  <style>
+    /* ── Global page overrides ─────────────────────────────── */
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+
+    /* ── Marketing Nav additions ────────────────────────────── */
+    .nav-links { display: flex; align-items: center; gap: var(--space-8); }
+    .nav-links a { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-secondary); text-decoration: none; transition: color var(--transition-fast); }
+    .nav-links a:hover { color: var(--color-text-primary); }
+    .nav-logo { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; }
+    .nav-logo svg { width: 28px; height: 28px; color: var(--color-brand); }
+    .nav-logo span { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brand); }
+    .mobile-menu-btn { display: none; background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: var(--space-2); }
+    .mobile-menu-btn svg { width: 24px; height: 24px; }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    .about-hero {
+      padding: var(--space-24) var(--space-6) var(--space-16);
+      text-align: center;
+    }
+    .about-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 5vw, var(--text-5xl));
+      font-weight: var(--weight-display);
+      line-height: var(--leading-tight);
+      letter-spacing: var(--letter-spacing-tight);
+      color: var(--color-text-primary);
+      margin: 0;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Mission Prose ─────────────────────────────────────── */
+    .mission-section {
+      padding: var(--space-8) var(--space-6) var(--space-24);
+    }
+    .mission-prose {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .mission-prose p {
+      font-size: var(--text-lg);
+      color: var(--color-text-secondary);
+      line-height: 1.85;
+      margin: 0 0 var(--space-8);
+      text-align: left;
+    }
+    .mission-prose p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── Values ────────────────────────────────────────────── */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .value-card {
+      text-align: center;
+      padding: var(--space-8) var(--space-6);
+    }
+    .value-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-xl);
+      background: var(--color-brand-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-5);
+      color: var(--color-brand);
+    }
+    .value-icon svg { width: 26px; height: 26px; }
+    .value-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-3);
+      line-height: var(--leading-tight);
+    }
+    .value-desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-relaxed);
+      margin: 0;
+    }
+
+    /* ── Team ──────────────────────────────────────────────── */
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-4);
+      text-align: center;
+      line-height: var(--leading-tight);
+    }
+    .section-sub {
+      font-size: var(--text-body);
+      color: var(--color-text-secondary);
+      text-align: center;
+      margin: 0 auto var(--space-12);
+      max-width: 480px;
+      line-height: var(--leading-relaxed);
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-8);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .team-card { text-align: center; }
+    .team-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-full);
+      background: var(--color-surface-sunken);
+      margin: 0 auto var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-tertiary);
+    }
+    .team-avatar svg { width: 32px; height: 32px; }
+    .team-name {
+      font-size: var(--text-body);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-1);
+    }
+    .team-role {
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+    }
+
+    /* ── CTA ───────────────────────────────────────────────── */
+    .cta-section { text-align: center; }
+    .cta-section .section-heading { margin-bottom: var(--space-4); }
+    .cta-sub {
+      font-size: var(--text-body);
+      color: var(--color-text-secondary);
+      margin: 0 0 var(--space-8);
+      line-height: var(--leading-relaxed);
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-12) var(--space-6);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-links { display: flex; gap: var(--space-6); }
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .footer-links a:hover { color: var(--color-text-secondary); }
+    .footer-copy {
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+    }
+
+    /* ── Mobile ─────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .values-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .about-hero { padding: var(--space-16) var(--space-4) var(--space-10); }
+      .mission-section { padding: var(--space-4) var(--space-4) var(--space-16); }
+      .marketing-section { padding: var(--space-16) var(--space-4); }
+      .footer-inner { flex-direction: column; gap: var(--space-6); text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-6);
+        gap: var(--space-4);
+        box-shadow: var(--shadow-md);
+      }
+      .mobile-menu-btn { display: block; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); max-width: 360px; }
+      .mission-prose p { font-size: var(--text-body); }
+    }
+  </style>
+</head>
+<body data-theme="light">
+<div id="app" class="marketing-page">
+
+  <!-- ════════ NAV ════════ -->
+  <nav class="marketing-nav">
+    <div class="marketing-nav-inner" style="position: relative;">
+      <a data-slug="landing" href="landing-v1.html" class="nav-logo">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 3c0 0-4 4-4 9s2 7 4 12c2-5 4-7 4-12S14 3 14 3z" fill="currentColor" opacity="0.3"/>
+          <path d="M14 6c0 0-6 5-6 11 0 3 1.5 5 3 6.5C12.5 22 14 19 14 19s1.5 3 3 4.5c1.5-1.5 3-3.5 3-6.5C20 11 14 6 14 6z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M14 12v10" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+          <path d="M11 17c1-1 2-1.5 3-1.5s2 .5 3 1.5" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+        </svg>
+        <span>Grove</span>
+      </a>
+      <div class="nav-links" :class="{ open: mobileMenuOpen }">
+        <a data-slug="landing" href="landing-v1.html#features">Features</a>
+        <a data-slug="pricing" href="pricing-v1.html">Pricing</a>
+        <a data-slug="about" href="about-v1.html" class="text-brand">About</a>
+        <a data-slug="contact" href="contact-v1.html">Contact</a>
+        <a data-slug="login" href="login-v1.html" class="btn btn-ghost btn-sm">Log In</a>
+        <a data-slug="signup" href="signup-v1.html" class="btn btn-primary btn-sm">Start Free Trial</a>
+      </div>
+      <button class="mobile-menu-btn" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ════════ HERO ════════ -->
+    <section class="about-hero">
+      <div class="marketing-inner">
+        <h1>Built for hotels that care about the details.</h1>
+      </div>
+    </section>
+
+    <!-- ════════ MISSION PROSE ════════ -->
+    <section class="mission-section">
+      <div class="mission-prose">
+        <p>Grove was born from a simple observation: the best hotels in the world are small ones, and they're being forced to choose between personal service and operational sanity.</p>
+        <p>We build software that meets the standard boutique hotel operators set for everything else in their property &mdash; the linens, the lighting, the music in the lobby. Technology that's invisible to guests and intuitive for staff.</p>
+        <p>We're a small team of hospitality nerds and engineers who believe that software for beautiful hotels should itself be beautiful.</p>
+      </div>
+    </section>
+
+    <!-- ════════ VALUES ════════ -->
+    <section class="marketing-section" style="background: var(--color-surface-sunken);">
+      <div class="marketing-inner">
+        <div class="values-grid">
+
+          <!-- Invisible technology -->
+          <div class="value-card">
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3 class="value-title">Invisible technology</h3>
+            <p class="value-desc">The best software disappears. Guests never see the dashboard. They just text a number and things happen. Technology should serve the experience, not interrupt it.</p>
+          </div>
+
+          <!-- Taste as a feature -->
+          <div class="value-card">
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3 class="value-title">Taste as a feature</h3>
+            <p class="value-desc">You chose every tile in the bathroom. Your software should meet the same standard. We sweat the details because our customers do.</p>
+          </div>
+
+          <!-- Staff empowerment -->
+          <div class="value-card">
+            <div class="value-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 class="value-title">Staff empowerment</h3>
+            <p class="value-desc">AI handles the routine so your team can focus on the moments that matter. Grove doesn't replace hospitality &mdash; it makes space for more of it.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ TEAM ════════ -->
+    <section class="marketing-section">
+      <div class="marketing-inner">
+        <h2 class="section-heading">The team</h2>
+        <p class="section-sub">A small team of hospitality nerds and engineers.</p>
+        <div class="team-grid">
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="team-name">Placeholder Name</div>
+            <div class="team-role">Co-founder &amp; CEO</div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="team-name">Placeholder Name</div>
+            <div class="team-role">Co-founder &amp; CTO</div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="team-name">Placeholder Name</div>
+            <div class="team-role">Head of Design</div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="team-name">Placeholder Name</div>
+            <div class="team-role">Head of Hospitality</div>
+          </div>
+
+        </div>
+        <div style="text-align: center; margin-top: var(--space-8);">
+          <span style="font-size: var(--text-xs); color: var(--color-text-tertiary); background: var(--color-surface-sunken); padding: var(--space-1) var(--space-3); border-radius: var(--radius-sm);">Team photos and bios pending</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ CTA ════════ -->
+    <section class="marketing-section cta-section">
+      <div class="marketing-inner">
+        <h2 class="section-heading">Give your guests the concierge they deserve.</h2>
+        <p class="cta-sub">Free 14-day trial. No credit card required.</p>
+        <a data-slug="signup" href="signup-v1.html" class="btn btn-lg btn-primary">Start Free Trial</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a data-slug="landing" href="landing-v1.html" class="nav-logo" style="text-decoration:none;">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:22px;color:var(--color-brand);">
+          <path d="M14 6c0 0-6 5-6 11 0 3 1.5 5 3 6.5C12.5 22 14 19 14 19s1.5 3 3 4.5c1.5-1.5 3-3.5 3-6.5C20 11 14 6 14 6z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+        <span style="font-family:var(--font-display);font-size:var(--text-lg);color:var(--color-brand);">Grove</span>
+      </a>
+      <div class="footer-links">
+        <a data-slug="pricing" href="pricing-v1.html">Pricing</a>
+        <a data-slug="about" href="about-v1.html">About</a>
+        <a data-slug="contact" href="contact-v1.html">Contact</a>
+        <a data-slug="login" href="login-v1.html">Log In</a>
+      </div>
+      <div class="footer-copy">&copy; 2026 Grove. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Prototype label -->
+  <div class="prototype-label">About v1</div>
+
+</div>
+
+<!-- Vue 3 -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+  const { createApp, ref } = Vue
+
+  createApp({
+    setup() {
+      const mobileMenuOpen = ref(false)
+      return { mobileMenuOpen }
+    }
+  }).mount('#app')
+</script>
+<script>
+;(function() {
+  var isLocal = window.location.protocol === 'file:'
+  if (isLocal) return
+  document.querySelectorAll('a[data-slug]').forEach(function(link) {
+    link.href = '/preview/' + link.dataset.slug
+  })
+})()
+</script>
+</body>
+</html>

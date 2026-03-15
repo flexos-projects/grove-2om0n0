@@ -1,0 +1,531 @@
+<!--
+  Grove — Guest Profile Prototype
+  Version: v1
+  Generated: 2026-03-15
+  Source spec: pages/011-route-guest-profile.md
+  Shared assets: prototype/shared/
+  Previous versions: none
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guest Profile — Grove</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/open-props/open-props.min.css">
+  <link rel="stylesheet" href="shared/tokens.css">
+  <link rel="stylesheet" href="shared/components.css">
+
+  <!-- Mock data -->
+  <script src="shared/mock-data-inline.js"></script>
+  <script src="shared/mock-data.js"></script>
+
+  <style>
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+    }
+    .topbar-breadcrumb a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .topbar-breadcrumb a:hover { color: var(--color-text-primary); }
+    .topbar-breadcrumb .sep { color: var(--color-text-tertiary); }
+    .topbar-breadcrumb .current {
+      color: var(--color-text-primary);
+      font-weight: var(--weight-medium);
+    }
+    .guest-name-editable {
+      cursor: pointer;
+      border-bottom: 1px dashed var(--color-border);
+      padding-bottom: 2px;
+      transition: border-color var(--transition-fast);
+    }
+    .guest-name-editable:hover {
+      border-bottom-color: var(--color-brand);
+    }
+    .guest-name-input {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--color-text-primary);
+      background: var(--color-surface-sunken);
+      border: 1px solid var(--color-brand);
+      border-radius: var(--radius-sm);
+      padding: var(--space-1) var(--space-2);
+      outline: none;
+    }
+    .preference-tag-removable {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      background: var(--color-accent-muted);
+      color: var(--color-accent);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-full);
+    }
+    .preference-tag-removable .remove-x {
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity var(--transition-fast);
+      font-size: 14px;
+      line-height: 1;
+      margin-left: 2px;
+    }
+    .preference-tag-removable .remove-x:hover { opacity: 1; }
+    .add-pref-input {
+      height: 28px;
+      font-size: var(--text-xs);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-full);
+      width: 140px;
+    }
+    .guest-notes-area {
+      width: 100%;
+      min-height: 100px;
+      resize: vertical;
+    }
+    .notes-save-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: var(--space-3);
+    }
+    .visit-details {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex: 1;
+      min-width: 0;
+    }
+    .visit-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .visit-preview {
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+      margin-top: var(--space-1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 400px;
+    }
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .sidebar-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--color-brand-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: var(--color-brand);
+      flex-shrink: 0;
+    }
+    .sidebar-user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-user-name {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-primary);
+    }
+    .sidebar-user-badge {
+      font-size: var(--text-xs);
+      color: var(--color-accent);
+    }
+    .content-inner {
+      max-width: 720px;
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+<div id="app" class="app-layout">
+  <!-- Sidebar -->
+  <aside class="app-sidebar">
+    <div class="sidebar-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-brand)"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span>Grove</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a data-slug="inbox" href="inbox-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Inbox
+        <span class="nav-badge" id="unread-badge"></span>
+      </a>
+      <a data-slug="guests" href="guests-v1.html" class="nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Guests
+      </a>
+      <a data-slug="knowledge" href="knowledge-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Knowledge
+      </a>
+      <a data-slug="analytics" href="analytics-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        Analytics
+      </a>
+      <a data-slug="settings" href="settings-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">MC</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Maria Chen</div>
+          <div class="sidebar-user-badge">Professional</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="app-main">
+    <div class="app-topbar">
+      <div class="topbar-breadcrumb">
+        <a data-slug="guests" href="guests-v1.html">Guests</a>
+        <span class="sep">/</span>
+        <span class="current" id="breadcrumb-name"></span>
+      </div>
+    </div>
+    <div class="app-content">
+      <div class="content-inner">
+        <!-- Guest Header -->
+        <div class="guest-header" id="guest-header-section">
+          <div class="guest-avatar" id="guest-avatar"></div>
+          <div class="guest-info">
+            <div id="guest-name-display" class="guest-name"></div>
+            <div class="guest-phone" id="guest-phone"></div>
+            <div class="guest-stats" id="guest-stats"></div>
+          </div>
+        </div>
+
+        <!-- Preferences -->
+        <div class="guest-section" id="prefs-section">
+          <div class="guest-section-title">Preferences</div>
+          <div class="guest-preferences" id="prefs-container"></div>
+        </div>
+
+        <!-- Staff Notes -->
+        <div class="guest-section" id="notes-section">
+          <div class="guest-section-title">Staff Notes</div>
+          <textarea class="textarea guest-notes-area" id="notes-textarea" placeholder="Add notes about this guest..."></textarea>
+          <div class="notes-save-row">
+            <button class="btn btn-primary btn-sm" id="save-notes-btn">Save Notes</button>
+          </div>
+        </div>
+
+        <!-- Conversation History -->
+        <div class="guest-section" id="history-section">
+          <div class="guest-section-title">Conversation History</div>
+          <div class="guest-history" id="history-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Prototype label -->
+<div class="prototype-label">Guest Profile</div>
+
+<!-- Prototype controls -->
+<div style="position:fixed;top:12px;right:12px;z-index:9999;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-family:var(--font-ui)">
+  <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary)">PROTOTYPE</div>
+  <select id="guest-picker" style="font-size:0.75rem;background:var(--color-surface-raised);border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:4px 10px;color:var(--color-text-secondary);cursor:pointer"></select>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const db = window.MOCK_DB
+const helpers = db.helpers
+
+// Utility
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase()
+}
+
+function formatDate(isoDate) {
+  if (!isoDate) return 'N/A'
+  const d = new Date(isoDate)
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+function relativeDate(isoDate) {
+  if (!isoDate) return 'N/A'
+  const d = new Date(isoDate)
+  const now = new Date('2026-03-15')
+  const diffDays = Math.floor((now - d) / 86400000)
+  if (diffDays === 0) return 'Today'
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) return diffDays + ' days ago'
+  return formatDate(isoDate)
+}
+
+function showToast(message, type) {
+  type = type || 'success'
+  const c = document.getElementById('toast-container')
+  const t = document.createElement('div')
+  t.className = 'toast toast-' + type
+  t.textContent = message
+  c.appendChild(t)
+  setTimeout(function() { t.remove() }, 3000)
+}
+
+// Unread badge
+const unreadCount = helpers.getPropertyConversations(db.currentProperty.id).filter(c => c.unreadByStaff).length
+if (unreadCount > 0) {
+  document.getElementById('unread-badge').textContent = unreadCount
+} else {
+  document.getElementById('unread-badge').style.display = 'none'
+}
+
+// Get guests for this property that have conversations
+const propertyGuests = helpers.filterBy(db.guests, 'propertyId', db.currentProperty.id)
+
+// Get guest ID from URL or default
+function getGuestIdFromUrl() {
+  const params = new URLSearchParams(window.location.search)
+  return params.get('id')
+}
+
+let currentGuestId = getGuestIdFromUrl() || propertyGuests.find(g => g.totalConversations > 0)?.id || propertyGuests[0]?.id
+let currentPreferences = []
+let editingName = false
+
+// Populate guest picker
+const picker = document.getElementById('guest-picker')
+propertyGuests.forEach(function(g) {
+  const opt = document.createElement('option')
+  opt.value = g.id
+  opt.textContent = g.name
+  if (g.id === currentGuestId) opt.selected = true
+  picker.appendChild(opt)
+})
+picker.addEventListener('change', function() {
+  currentGuestId = this.value
+  renderProfile()
+})
+
+function renderProfile() {
+  const profile = helpers.getGuestProfile(currentGuestId)
+  if (!profile) {
+    document.querySelector('.content-inner').innerHTML = '<div class="empty-state"><h2 class="empty-title">Guest not found</h2><p class="empty-desc"><a data-slug="guests" href="guests-v1.html" style="color:var(--color-brand)">Back to guests</a></p></div>'
+    return
+  }
+
+  // Breadcrumb
+  document.getElementById('breadcrumb-name').textContent = profile.name
+
+  // Avatar
+  document.getElementById('guest-avatar').textContent = getInitials(profile.name)
+
+  // Name (editable)
+  const nameEl = document.getElementById('guest-name-display')
+  nameEl.innerHTML = ''
+  const nameSpan = document.createElement('span')
+  nameSpan.className = 'guest-name-editable'
+  nameSpan.textContent = profile.name
+  nameSpan.title = 'Click to edit'
+  nameSpan.addEventListener('click', function() {
+    const input = document.createElement('input')
+    input.type = 'text'
+    input.className = 'guest-name-input'
+    input.value = nameSpan.textContent
+    nameEl.replaceChild(input, nameSpan)
+    input.focus()
+    input.select()
+    function save() {
+      const val = input.value.trim()
+      if (val) {
+        nameSpan.textContent = val
+        document.getElementById('breadcrumb-name').textContent = val
+        showToast('Guest profile updated.')
+      }
+      nameEl.replaceChild(nameSpan, input)
+    }
+    input.addEventListener('blur', save)
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') save()
+      if (e.key === 'Escape') nameEl.replaceChild(nameSpan, input)
+    })
+  })
+  nameEl.appendChild(nameSpan)
+
+  // Phone
+  document.getElementById('guest-phone').textContent = profile.phoneNumber
+
+  // Stats
+  const statsEl = document.getElementById('guest-stats')
+  statsEl.innerHTML = ''
+  const stat1 = document.createElement('span')
+  stat1.textContent = 'First contact: ' + formatDate(profile.firstContactAt)
+  const stat2 = document.createElement('span')
+  stat2.textContent = profile.totalConversations + ' conversation' + (profile.totalConversations !== 1 ? 's' : '')
+  statsEl.appendChild(stat1)
+  statsEl.appendChild(stat2)
+
+  // Preferences
+  currentPreferences = (profile.preferences || []).slice()
+  renderPreferences()
+
+  // Notes
+  document.getElementById('notes-textarea').value = profile.staffNotes || ''
+
+  // Conversation history
+  renderHistory(profile)
+}
+
+function renderPreferences() {
+  const container = document.getElementById('prefs-container')
+  container.innerHTML = ''
+
+  if (currentPreferences.length === 0) {
+    const empty = document.createElement('span')
+    empty.style.cssText = 'font-size:var(--text-sm);color:var(--color-text-tertiary);'
+    empty.textContent = 'No preferences recorded yet.'
+    container.appendChild(empty)
+  } else {
+    currentPreferences.forEach(function(pref, idx) {
+      const tag = document.createElement('span')
+      tag.className = 'preference-tag-removable'
+      tag.innerHTML = pref + ' <span class="remove-x" data-idx="' + idx + '">&times;</span>'
+      tag.querySelector('.remove-x').addEventListener('click', function() {
+        currentPreferences.splice(idx, 1)
+        renderPreferences()
+        showToast('Guest profile updated.')
+      })
+      container.appendChild(tag)
+    })
+  }
+
+  // Add button
+  const addBtn = document.createElement('button')
+  addBtn.className = 'btn btn-ghost btn-sm'
+  addBtn.textContent = '+ Add'
+  addBtn.addEventListener('click', function() {
+    addBtn.style.display = 'none'
+    const input = document.createElement('input')
+    input.type = 'text'
+    input.className = 'input add-pref-input'
+    input.placeholder = 'New preference...'
+    container.appendChild(input)
+    input.focus()
+    function done() {
+      const val = input.value.trim()
+      if (val) {
+        currentPreferences.push(val)
+        showToast('Guest profile updated.')
+      }
+      renderPreferences()
+    }
+    input.addEventListener('blur', done)
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') done()
+      if (e.key === 'Escape') renderPreferences()
+    })
+  })
+  container.appendChild(addBtn)
+}
+
+function renderHistory(profile) {
+  const container = document.getElementById('history-container')
+  container.innerHTML = ''
+  const convos = profile.conversations || []
+  if (convos.length === 0) {
+    container.innerHTML = '<div style="font-size:var(--text-sm);color:var(--color-text-tertiary);padding:var(--space-4) 0;">No conversations yet.</div>'
+    return
+  }
+
+  // Sort by lastMessageAt desc
+  const sorted = helpers.sortBy(convos, 'lastMessageAt', 'desc')
+  sorted.forEach(function(conv) {
+    const visit = document.createElement('div')
+    visit.className = 'guest-visit'
+    visit.onclick = function() { window.location.href = 'inbox-v1.html?conv=' + conv.id }
+
+    const details = document.createElement('div')
+    details.className = 'visit-details'
+
+    const dateWrap = document.createElement('div')
+    const dateEl = document.createElement('div')
+    dateEl.className = 'guest-visit-date'
+    dateEl.textContent = relativeDate(conv.lastMessageAt)
+    const countEl = document.createElement('div')
+    countEl.className = 'guest-visit-count'
+    countEl.textContent = conv.messageCount + ' messages'
+    const preview = document.createElement('div')
+    preview.className = 'visit-preview'
+    preview.textContent = conv.lastMessagePreview || ''
+    dateWrap.appendChild(dateEl)
+    dateWrap.appendChild(countEl)
+    dateWrap.appendChild(preview)
+    details.appendChild(dateWrap)
+
+    const meta = document.createElement('div')
+    meta.className = 'visit-meta'
+
+    // Status badge
+    const statusBadge = document.createElement('span')
+    statusBadge.className = 'badge badge-' + conv.status
+    statusBadge.textContent = conv.status.charAt(0).toUpperCase() + conv.status.slice(1)
+    meta.appendChild(statusBadge)
+
+    // Category badge
+    if (conv.category) {
+      const catBadge = document.createElement('span')
+      catBadge.className = 'badge badge-category-' + conv.category
+      catBadge.textContent = conv.category.charAt(0).toUpperCase() + conv.category.slice(1)
+      meta.appendChild(catBadge)
+    }
+
+    visit.appendChild(details)
+    visit.appendChild(meta)
+    container.appendChild(visit)
+  })
+}
+
+// Save notes
+document.getElementById('save-notes-btn').addEventListener('click', function() {
+  showToast('Guest profile updated.')
+})
+
+// Initial render
+renderProfile()
+</script>
+<script>
+;(function() {
+  var isLocal = window.location.protocol === 'file:'
+  if (isLocal) return
+  document.querySelectorAll('a[data-slug]').forEach(function(link) {
+    link.href = '/preview/' + link.dataset.slug
+  })
+})()
+</script>
+</body>
+</html>

@@ -1,0 +1,1057 @@
+<!--
+  Grove — Landing Page Prototype
+  Version: v1
+  Generated: 2026-03-15
+  Source spec: docs/003-pages.md (Landing Page section)
+  Shared assets: prototype/shared/
+  Previous versions: none
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grove — SMS Concierge for Boutique Hotels</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/open-props/open-props.min.css">
+  <link rel="stylesheet" href="shared/tokens.css">
+  <link rel="stylesheet" href="shared/components.css">
+
+  <!-- Mock data -->
+  <script src="shared/mock-data-inline.js"></script>
+  <script src="shared/mock-data.js"></script>
+
+  <style>
+    /* ── Global page overrides ─────────────────────────────── */
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+
+    /* ── Marketing Nav additions ────────────────────────────── */
+    .nav-links { display: flex; align-items: center; gap: var(--space-8); }
+    .nav-links a { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-secondary); text-decoration: none; transition: color var(--transition-fast); }
+    .nav-links a:hover { color: var(--color-text-primary); }
+    .nav-logo { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; }
+    .nav-logo svg { width: 28px; height: 28px; color: var(--color-brand); }
+    .nav-logo span { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brand); }
+    .mobile-menu-btn { display: none; background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: var(--space-2); }
+    .mobile-menu-btn svg { width: 24px; height: 24px; }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    .hero-section { padding: var(--space-24) var(--space-6) var(--space-20); }
+    .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: var(--space-16); align-items: center; }
+    .hero-copy { max-width: 540px; }
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, var(--text-5xl));
+      font-weight: var(--weight-normal);
+      line-height: var(--leading-tight);
+      letter-spacing: var(--letter-spacing-tight);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-6);
+    }
+    .hero-sub {
+      font-size: var(--text-lg);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-relaxed);
+      margin: 0 0 var(--space-10);
+      max-width: 460px;
+    }
+
+    /* ── Product Preview (hero mockup) ─────────────────────── */
+    .product-preview {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+    .preview-toolbar {
+      height: 40px;
+      background: var(--color-surface-sunken);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-4);
+      gap: var(--space-2);
+    }
+    .toolbar-dot {
+      width: 10px; height: 10px;
+      border-radius: var(--radius-full);
+      background: var(--color-border-strong);
+    }
+    .toolbar-dot:first-child { background: #EF6B6B; }
+    .toolbar-dot:nth-child(2) { background: #F5C542; }
+    .toolbar-dot:nth-child(3) { background: #5FC76F; }
+    .toolbar-url {
+      flex: 1;
+      text-align: center;
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+      font-family: var(--font-mono);
+    }
+    .preview-body {
+      display: flex;
+      min-height: 380px;
+    }
+    .preview-sidebar-mini {
+      width: 56px;
+      background: #1A1918;
+      border-right: 1px solid #2E2C28;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--space-3) 0;
+      gap: var(--space-4);
+      flex-shrink: 0;
+    }
+    .preview-sidebar-mini .mini-logo {
+      width: 32px; height: 32px;
+      background: #1B4332;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: var(--space-2);
+    }
+    .preview-sidebar-mini .mini-logo svg { width: 18px; height: 18px; color: #D8F3DC; }
+    .mini-nav-dot {
+      width: 28px; height: 28px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      color: #78716C;
+    }
+    .mini-nav-dot.active { background: #1B4332; color: #D8F3DC; }
+    .mini-nav-dot svg { width: 16px; height: 16px; }
+    .preview-conv-list {
+      width: 180px;
+      background: #1A1918;
+      border-right: 1px solid #2E2C28;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .preview-conv-header {
+      padding: var(--space-3);
+      border-bottom: 1px solid #2E2C28;
+      font-size: 10px;
+      font-weight: var(--weight-semibold);
+      color: #A8A29E;
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
+    }
+    .preview-conv-item {
+      display: flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border-bottom: 1px solid #2E2C28;
+      cursor: default;
+    }
+    .preview-conv-item.selected { background: #1B4332; border-left: 2px solid #40916C; }
+    .preview-conv-avatar {
+      width: 28px; height: 28px;
+      border-radius: var(--radius-full);
+      background: #242321;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: var(--weight-semibold);
+      color: #A8A29E;
+      flex-shrink: 0;
+    }
+    .preview-conv-item.selected .preview-conv-avatar { background: #2D6A4F; color: #D8F3DC; }
+    .preview-conv-text { min-width: 0; }
+    .preview-conv-name { font-size: 11px; font-weight: var(--weight-medium); color: #F5F3EF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .preview-conv-snippet { font-size: 9px; color: #78716C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+    .preview-conv-item.selected .preview-conv-snippet { color: #A8A29E; }
+    .preview-conv-time { font-size: 9px; color: #78716C; flex-shrink: 0; margin-left: auto; }
+
+    .preview-thread {
+      flex: 1;
+      background: #0F0F0E;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .preview-thread-header {
+      padding: var(--space-2) var(--space-3);
+      border-bottom: 1px solid #2E2C28;
+      display: flex; align-items: center; gap: var(--space-2);
+    }
+    .preview-thread-name { font-size: 12px; font-weight: var(--weight-medium); color: #F5F3EF; }
+    .preview-thread-badge {
+      font-size: 8px; font-weight: var(--weight-semibold);
+      background: #D8F3DC22; color: #40916C;
+      padding: 1px 6px; border-radius: var(--radius-full);
+    }
+    .preview-messages {
+      flex: 1;
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      overflow-y: auto;
+    }
+    .preview-msg {
+      max-width: 78%;
+      padding: var(--space-2) var(--space-3);
+      font-size: 11px;
+      line-height: 1.5;
+      color: #F5F3EF;
+    }
+    .preview-msg.guest {
+      align-self: flex-start;
+      background: #242321;
+      border-radius: 10px 10px 10px 3px;
+    }
+    .preview-msg.ai {
+      align-self: flex-end;
+      background: #1A2E23;
+      border-radius: 10px 10px 3px 10px;
+      position: relative;
+    }
+    .preview-msg.staff {
+      align-self: flex-end;
+      background: #1B4332;
+      border-radius: 10px 10px 3px 10px;
+    }
+    .preview-msg .ai-tag {
+      font-size: 8px;
+      font-weight: var(--weight-semibold);
+      color: #40916C;
+      background: #1B433266;
+      padding: 1px 5px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+      margin-bottom: 3px;
+    }
+    .preview-msg-time {
+      font-size: 8px; color: #78716C; margin-top: 3px;
+    }
+    .preview-input-bar {
+      padding: var(--space-2) var(--space-3);
+      border-top: 1px solid #2E2C28;
+      display: flex; align-items: center; gap: var(--space-2);
+    }
+    .preview-input-fake {
+      flex: 1; height: 28px;
+      background: #1A1918;
+      border: 1px solid #2E2C28;
+      border-radius: var(--radius-md);
+      font-size: 10px;
+      color: #78716C;
+      display: flex; align-items: center;
+      padding: 0 var(--space-2);
+    }
+    .preview-send-btn {
+      width: 28px; height: 28px;
+      background: #1B4332;
+      border: none;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      color: #D8F3DC;
+      cursor: default;
+    }
+    .preview-send-btn svg { width: 14px; height: 14px; }
+
+    /* ── How It Works ──────────────────────────────────────── */
+    .how-section { background: var(--color-surface-sunken); }
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-10);
+      text-align: center;
+    }
+    .how-step-number {
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      width: 40px; height: 40px;
+      border-radius: var(--radius-full);
+      background: var(--color-brand);
+      color: var(--color-brand-text);
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-5);
+    }
+    .how-icon {
+      width: 48px; height: 48px;
+      margin: 0 auto var(--space-4);
+      color: var(--color-brand);
+    }
+    .how-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-3);
+    }
+    .how-desc {
+      font-size: var(--text-base);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-relaxed);
+      margin: 0;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Editorial Prose ───────────────────────────────────── */
+    .prose-section { padding: var(--space-24) var(--space-6); }
+    .prose-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .prose-heading {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-8);
+      line-height: var(--leading-tight);
+    }
+    .prose-body {
+      font-size: var(--text-lg);
+      line-height: var(--leading-relaxed);
+      color: var(--color-text-secondary);
+      margin: 0 0 var(--space-6);
+    }
+    .prose-body:last-child { margin-bottom: 0; }
+
+    /* ── Features Grid ─────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+    .feature-card {
+      transition: box-shadow var(--transition-base), transform var(--transition-base);
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-lg);
+      background: var(--color-brand-muted);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-brand);
+      margin-bottom: var(--space-4);
+    }
+    .feature-icon svg { width: 22px; height: 22px; }
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-2);
+    }
+    .feature-desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-relaxed);
+      margin: 0;
+    }
+
+    /* ── Social Proof ──────────────────────────────────────── */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+    .testimonial-card {
+      text-align: center;
+      padding: var(--space-8);
+    }
+    .testimonial-quote-mark {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      line-height: 1;
+      color: var(--color-brand-muted);
+      margin-bottom: var(--space-2);
+      user-select: none;
+    }
+    .testimonial-text {
+      font-size: var(--text-base);
+      font-style: italic;
+      color: var(--color-text-primary);
+      line-height: var(--leading-relaxed);
+      margin: 0 0 var(--space-6);
+    }
+    .testimonial-author {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-1);
+    }
+    .testimonial-property {
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+      margin: 0;
+    }
+
+    /* ── Pricing ───────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      align-items: start;
+    }
+    .pricing-card {
+      padding: var(--space-8);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .pricing-card.recommended {
+      border: 2px solid var(--color-brand);
+      transform: scale(1.03);
+      box-shadow: var(--shadow-lg);
+    }
+    .pricing-badge {
+      position: absolute;
+      top: calc(-1 * var(--space-3));
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-accent);
+      color: #fff;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      padding: var(--space-1) var(--space-4);
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
+    }
+    .pricing-plan-name {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-2);
+    }
+    .pricing-desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin: 0 0 var(--space-5);
+      line-height: var(--leading-relaxed);
+    }
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-1);
+      margin-bottom: var(--space-6);
+    }
+    .pricing-amount {
+      font-size: var(--text-4xl);
+      font-weight: var(--weight-bold);
+      color: var(--color-text-primary);
+      letter-spacing: var(--letter-spacing-tight);
+      line-height: 1;
+    }
+    .pricing-period {
+      font-size: var(--text-sm);
+      color: var(--color-text-tertiary);
+    }
+    .pricing-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 var(--space-8);
+      flex: 1;
+    }
+    .pricing-features li {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .pricing-features li svg {
+      width: 16px; height: 16px;
+      color: var(--color-success);
+      flex-shrink: 0;
+    }
+
+    /* ── Final CTA ─────────────────────────────────────────── */
+    .cta-section {
+      background: var(--color-brand);
+      color: #fff;
+      text-align: center;
+      padding: var(--space-24) var(--space-6);
+    }
+    .cta-heading {
+      font-family: var(--font-display);
+      font-size: clamp(var(--text-3xl), 4vw, var(--text-4xl));
+      color: #fff;
+      margin: 0 0 var(--space-4);
+      line-height: var(--leading-tight);
+    }
+    .cta-sub {
+      font-size: var(--text-lg);
+      color: rgba(255,255,255,0.75);
+      margin: 0 0 var(--space-10);
+    }
+    .btn-white {
+      background: #fff;
+      color: var(--color-brand);
+      font-weight: var(--weight-semibold);
+    }
+    .btn-white:hover { background: #F5F3EF; }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-12) var(--space-6);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-links { display: flex; gap: var(--space-6); }
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: var(--color-text-tertiary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .footer-links a:hover { color: var(--color-text-secondary); }
+    .footer-copy {
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+    }
+
+    /* ── Section Headings ──────────────────────────────────── */
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-4);
+      text-align: center;
+      line-height: var(--leading-tight);
+    }
+    .section-sub {
+      font-size: var(--text-base);
+      color: var(--color-text-secondary);
+      text-align: center;
+      margin: 0 auto var(--space-12);
+      max-width: 520px;
+      line-height: var(--leading-relaxed);
+    }
+
+    /* ── Scroll reveal ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Mobile ─────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: var(--space-12); }
+      .hero-copy { max-width: 100%; }
+      .product-preview { max-width: 600px; margin: 0 auto; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-card.recommended { transform: scale(1.01); }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section { padding: var(--space-16) var(--space-4) var(--space-12); }
+      .marketing-section { padding: var(--space-16) var(--space-4); }
+      .prose-section { padding: var(--space-16) var(--space-4); }
+      .how-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+      .features-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; gap: var(--space-4); }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+      .pricing-card.recommended { transform: none; }
+      .footer-inner { flex-direction: column; gap: var(--space-6); text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-6);
+        gap: var(--space-4);
+        box-shadow: var(--shadow-md);
+      }
+      .mobile-menu-btn { display: block; }
+      .hero-h1 { font-size: 2.25rem; }
+      .hero-sub { font-size: var(--text-base); }
+      .btn-hero { width: 100%; }
+      .preview-conv-list { display: none; }
+      .preview-sidebar-mini { width: 44px; }
+    }
+  </style>
+</head>
+<body data-theme="light">
+<div id="app" class="marketing-page">
+
+  <!-- ════════ NAV ════════ -->
+  <nav class="marketing-nav">
+    <div class="marketing-nav-inner" style="position: relative;">
+      <a data-slug="landing" href="landing-v1.html" class="nav-logo">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 3c0 0-4 4-4 9s2 7 4 12c2-5 4-7 4-12S14 3 14 3z" fill="currentColor" opacity="0.3"/>
+          <path d="M14 6c0 0-6 5-6 11 0 3 1.5 5 3 6.5C12.5 22 14 19 14 19s1.5 3 3 4.5c1.5-1.5 3-3.5 3-6.5C20 11 14 6 14 6z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M14 12v10" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+          <path d="M11 17c1-1 2-1.5 3-1.5s2 .5 3 1.5" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+        </svg>
+        <span>Grove</span>
+      </a>
+      <div class="nav-links" :class="{ open: mobileMenuOpen }">
+        <a href="#features" @click="scrollTo('features')">Features</a>
+        <a href="#pricing" @click="scrollTo('pricing')">Pricing</a>
+        <a href="#about" @click="scrollTo('about')">About</a>
+        <a data-slug="signup" href="signup-v1.html" class="btn btn-primary btn-sm">Start Free Trial</a>
+      </div>
+      <button class="mobile-menu-btn" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ════════ HERO ════════ -->
+    <section class="hero-section">
+      <div class="hero-inner">
+        <div class="hero-copy reveal">
+          <h1 class="hero-h1">Your guests already have a concierge. It's in their pocket.</h1>
+          <p class="hero-sub">Grove gives boutique hotels an SMS concierge that's always on. Guests text, things happen.</p>
+          <a data-slug="signup" href="signup-v1.html" class="btn btn-primary btn-lg btn-hero">Start Free Trial</a>
+        </div>
+
+        <!-- Product Preview — mini inbox mockup -->
+        <div class="product-preview reveal" style="transition-delay: 0.15s;">
+          <div class="preview-toolbar">
+            <div class="toolbar-dot"></div>
+            <div class="toolbar-dot"></div>
+            <div class="toolbar-dot"></div>
+            <div class="toolbar-url">grove.app/inbox</div>
+          </div>
+          <div class="preview-body">
+            <!-- Mini sidebar -->
+            <div class="preview-sidebar-mini">
+              <div class="mini-logo">
+                <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 6c0 0-6 5-6 11 0 3 1.5 5 3 6.5C12.5 22 14 19 14 19s1.5 3 3 4.5c1.5-1.5 3-3.5 3-6.5C20 11 14 6 14 6z" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              </div>
+              <div class="mini-nav-dot active">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="mini-nav-dot">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <div class="mini-nav-dot">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              </div>
+            </div>
+            <!-- Conversation list -->
+            <div class="preview-conv-list">
+              <div class="preview-conv-header">Conversations</div>
+              <div class="preview-conv-item selected">
+                <div class="preview-conv-avatar">SM</div>
+                <div class="preview-conv-text">
+                  <div class="preview-conv-name">Sarah M.</div>
+                  <div class="preview-conv-snippet">Can you recommend a good Italian...</div>
+                </div>
+                <div class="preview-conv-time">2m</div>
+              </div>
+              <div class="preview-conv-item">
+                <div class="preview-conv-avatar">JT</div>
+                <div class="preview-conv-text">
+                  <div class="preview-conv-name">James T.</div>
+                  <div class="preview-conv-snippet">The air conditioning in room 304...</div>
+                </div>
+                <div class="preview-conv-time">18m</div>
+              </div>
+              <div class="preview-conv-item">
+                <div class="preview-conv-avatar">AK</div>
+                <div class="preview-conv-text">
+                  <div class="preview-conv-name">Anna K.</div>
+                  <div class="preview-conv-snippet">Just checked in, room is lovely...</div>
+                </div>
+                <div class="preview-conv-time">1h</div>
+              </div>
+            </div>
+            <!-- Thread -->
+            <div class="preview-thread">
+              <div class="preview-thread-header">
+                <div class="preview-conv-avatar" style="width:24px;height:24px;font-size:9px;">SM</div>
+                <div class="preview-thread-name">Sarah M.</div>
+                <div class="preview-thread-badge">Active</div>
+              </div>
+              <div class="preview-messages">
+                <div class="preview-msg guest">
+                  Hi, can you recommend a good Italian restaurant nearby?
+                  <div class="preview-msg-time">6:42 PM</div>
+                </div>
+                <div class="preview-msg ai">
+                  <div class="ai-tag">AI</div>
+                  I'd recommend Trattoria Sorrento — it's a 5-minute walk from the hotel. They do handmade pasta and have a lovely courtyard for dinner. Would you like me to check if they have availability tonight?
+                  <div class="preview-msg-time">6:42 PM</div>
+                </div>
+                <div class="preview-msg guest">
+                  Yes please, for 2 at 8pm
+                  <div class="preview-msg-time">6:44 PM</div>
+                </div>
+                <div class="preview-msg ai">
+                  <div class="ai-tag">AI</div>
+                  I'll check on that for you. One moment.
+                  <div class="preview-msg-time">6:44 PM</div>
+                </div>
+                <div class="preview-msg staff">
+                  Great news — I've booked a table for 2 at Trattoria Sorrento tonight at 8pm under your name. When you arrive, mention you're staying with us and they'll take great care of you. Enjoy!
+                  <div class="preview-msg-time">6:48 PM · Maria</div>
+                </div>
+              </div>
+              <div class="preview-input-bar">
+                <div class="preview-input-fake">Type a message...</div>
+                <div class="preview-send-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ HOW IT WORKS ════════ -->
+    <section class="marketing-section how-section" id="how">
+      <div class="marketing-inner">
+        <h2 class="section-heading reveal">How it works</h2>
+        <p class="section-sub reveal">Three steps. No app for guests to download. No training manual for staff.</p>
+        <div class="how-grid">
+          <!-- Step 1 -->
+          <div class="reveal" style="transition-delay: 0.05s;">
+            <div class="how-step-number">1</div>
+            <div class="how-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3 class="how-title">Guest texts your number</h3>
+            <p class="how-desc">Print it on the room key, the welcome letter, the nightstand card. No app to download.</p>
+          </div>
+          <!-- Step 2 -->
+          <div class="reveal" style="transition-delay: 0.15s;">
+            <div class="how-step-number">2</div>
+            <div class="how-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.4V11h-4V9.4C8.8 8.8 8 7.5 8 6a4 4 0 0 1 4-4z"/><path d="M10 11h4v2a2 2 0 0 1-4 0v-2z"/><path d="M8 17h8"/><path d="M7 21h10"/><path d="M9 17v4"/><path d="M15 17v4"/></svg>
+            </div>
+            <h3 class="how-title">AI handles or routes</h3>
+            <p class="how-desc">Simple requests get instant answers. Complex ones go to your team with context.</p>
+          </div>
+          <!-- Step 3 -->
+          <div class="reveal" style="transition-delay: 0.25s;">
+            <div class="how-step-number">3</div>
+            <div class="how-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </div>
+            <h3 class="how-title">Guest is delighted</h3>
+            <p class="how-desc">Fast, personal, and it remembers them next time they stay.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ FOR HOTELS THAT CARE ════════ -->
+    <section class="prose-section" id="about">
+      <div class="prose-inner reveal">
+        <h2 class="prose-heading">For hotels that care</h2>
+        <p class="prose-body">You chose every tile in the bathroom. You tasted every item on the breakfast menu. You know the name of the florist who does the lobby arrangements. Your concierge service should meet the same standard.</p>
+        <p class="prose-body">Grove is an SMS concierge for hotels that care about the details. Guests text a number and get the kind of help that makes them tell their friends about your hotel. Behind the scenes, AI handles the routine — directions, restaurant recs, checkout times — so your team can focus on the moments that matter.</p>
+        <p class="prose-body">No app for guests to download. No training manual for staff. Just a phone number and a dashboard.</p>
+      </div>
+    </section>
+
+    <!-- ════════ FEATURES ════════ -->
+    <section class="marketing-section" id="features" style="background: var(--color-surface-sunken);">
+      <div class="marketing-inner">
+        <h2 class="section-heading reveal">Everything you need, nothing you don't</h2>
+        <p class="section-sub reveal">Six features, each one chosen because it makes your guests' stay better.</p>
+        <div class="features-grid">
+          <!-- SMS Concierge -->
+          <div class="card feature-card reveal" style="transition-delay: 0.05s;">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3 class="feature-title">SMS Concierge</h3>
+            <p class="feature-desc">Guests text. Things happen. No app download, no friction.</p>
+          </div>
+          <!-- AI That Sounds Like You -->
+          <div class="card feature-card reveal" style="transition-delay: 0.1s;">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.4V11h-4V9.4C8.8 8.8 8 7.5 8 6a4 4 0 0 1 4-4z"/><path d="M10 11h4v2a2 2 0 0 1-4 0v-2z"/><path d="M8 17h8"/><path d="M7 21h10"/><path d="M9 17v4"/><path d="M15 17v4"/></svg>
+            </div>
+            <h3 class="feature-title">AI That Sounds Like You</h3>
+            <p class="feature-desc">Train the AI to match your hotel's voice. Warm, formal, or somewhere in between.</p>
+          </div>
+          <!-- Guest Memory -->
+          <div class="card feature-card reveal" style="transition-delay: 0.15s;">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </div>
+            <h3 class="feature-title">Guest Memory</h3>
+            <p class="feature-desc">Preferences accumulate. Returning guests get recognised. Every visit gets better.</p>
+          </div>
+          <!-- Smart Routing -->
+          <div class="card feature-card reveal" style="transition-delay: 0.2s;">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+            </div>
+            <h3 class="feature-title">Smart Routing</h3>
+            <p class="feature-desc">Dinner questions go to your restaurant contact. Maintenance goes to housekeeping. Automatically.</p>
+          </div>
+          <!-- Local Knowledge -->
+          <div class="card feature-card reveal" style="transition-delay: 0.25s;">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3 class="feature-title">Local Knowledge</h3>
+            <p class="feature-desc">Build a guide to your neighbourhood. The AI recommends your favourites, not generic search results.</p>
+          </div>
+          <!-- Quiet Analytics -->
+          <div class="card feature-card reveal" style="transition-delay: 0.3s;">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <h3 class="feature-title">Quiet Analytics</h3>
+            <p class="feature-desc">See what guests ask about most. Find the gaps. Improve without surveying anyone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ SOCIAL PROOF ════════ -->
+    <section class="marketing-section" id="testimonials">
+      <div class="marketing-inner">
+        <h2 class="section-heading reveal">What hotel operators are saying</h2>
+        <div style="height: var(--space-10);"></div>
+        <div class="testimonials-grid">
+          <div class="card testimonial-card reveal" style="transition-delay: 0.05s;">
+            <div class="testimonial-quote-mark">&ldquo;</div>
+            <p class="testimonial-text">We went from missing half our guest requests to handling them all in under two minutes.</p>
+            <p class="testimonial-author">Maria</p>
+            <p class="testimonial-property">The Linden Hotel, Austin</p>
+          </div>
+          <div class="card testimonial-card reveal" style="transition-delay: 0.15s;">
+            <div class="testimonial-quote-mark">&ldquo;</div>
+            <p class="testimonial-text">Our TripAdvisor score went up 0.4 points in the first quarter. Guests keep mentioning how responsive we are.</p>
+            <p class="testimonial-author">James</p>
+            <p class="testimonial-property">Maison Blanc, Charleston</p>
+          </div>
+          <div class="card testimonial-card reveal" style="transition-delay: 0.25s;">
+            <div class="testimonial-quote-mark">&ldquo;</div>
+            <p class="testimonial-text">It feels like we added three staff members.</p>
+            <p class="testimonial-author">Anika</p>
+            <p class="testimonial-property">Haus Hotel Group, Berlin</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ PRICING ════════ -->
+    <section class="marketing-section" id="pricing" style="background: var(--color-surface-sunken);">
+      <div class="marketing-inner">
+        <h2 class="section-heading reveal">Simple pricing. No surprises.</h2>
+        <p class="section-sub reveal">Every plan includes AI-powered SMS concierge. Choose the one that fits.</p>
+        <div class="pricing-grid">
+          <!-- Starter -->
+          <div class="card pricing-card reveal" style="transition-delay: 0.05s;">
+            <h3 class="pricing-plan-name">Starter</h3>
+            <p class="pricing-desc">For hotels trying Grove for the first time.</p>
+            <div class="pricing-price">
+              <span class="pricing-amount">$149</span>
+              <span class="pricing-period">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                1 property
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                500 conversations/month
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                AI auto-responses
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                2 staff seats
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Email support
+              </li>
+            </ul>
+            <a data-slug="signup" href="signup-v1.html" class="btn btn-secondary btn-md" style="width: 100%; justify-content: center;">Start Free Trial</a>
+          </div>
+          <!-- Professional -->
+          <div class="card pricing-card recommended reveal" style="transition-delay: 0.15s;">
+            <div class="pricing-badge">Recommended</div>
+            <h3 class="pricing-plan-name">Professional</h3>
+            <p class="pricing-desc">For hotels ready to make Grove their standard.</p>
+            <div class="pricing-price">
+              <span class="pricing-amount">$349</span>
+              <span class="pricing-period">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Unlimited conversations
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Custom AI voice training
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                5 staff seats
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Guest memory &amp; recognition
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Smart request routing
+              </li>
+            </ul>
+            <a data-slug="signup" href="signup-v1.html" class="btn btn-primary btn-md" style="width: 100%; justify-content: center;">Start Free Trial</a>
+          </div>
+          <!-- Group -->
+          <div class="card pricing-card reveal" style="transition-delay: 0.25s;">
+            <h3 class="pricing-plan-name">Group</h3>
+            <p class="pricing-desc">For hotel groups running multiple properties.</p>
+            <div class="pricing-price">
+              <span class="pricing-amount">$249</span>
+              <span class="pricing-period">/mo per property</span>
+            </div>
+            <ul class="pricing-features">
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                3-20 properties
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Everything in Professional
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Cross-property guest recognition
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Group analytics &amp; API access
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Dedicated onboarding
+              </li>
+            </ul>
+            <a data-slug="contact" href="contact-v1.html" class="btn btn-secondary btn-md" style="width: 100%; justify-content: center;">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ FINAL CTA ════════ -->
+    <section class="cta-section">
+      <div class="marketing-inner reveal">
+        <h2 class="cta-heading">Give your guests the concierge they deserve.</h2>
+        <p class="cta-sub">Free 14-day trial. No credit card required.</p>
+        <a data-slug="signup" href="signup-v1.html" class="btn btn-white btn-lg">Start Free Trial</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a data-slug="landing" href="landing-v1.html" class="nav-logo" style="text-decoration:none;">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:22px;color:var(--color-brand);">
+          <path d="M14 6c0 0-6 5-6 11 0 3 1.5 5 3 6.5C12.5 22 14 19 14 19s1.5 3 3 4.5c1.5-1.5 3-3.5 3-6.5C20 11 14 6 14 6z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+        <span style="font-family:var(--font-display);font-size:var(--text-lg);color:var(--color-brand);">Grove</span>
+      </a>
+      <div class="footer-links">
+        <a data-slug="about" href="about-v1.html">About</a>
+        <a data-slug="pricing" href="pricing-v1.html">Pricing</a>
+        <a data-slug="contact" href="contact-v1.html">Contact</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+      <div class="footer-copy">&copy; 2026 Grove. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Prototype label -->
+  <div class="prototype-label">Landing Page v1</div>
+
+</div>
+
+<!-- Vue 3 -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+  const { createApp, ref, onMounted } = Vue
+
+  createApp({
+    setup() {
+      const mobileMenuOpen = ref(false)
+
+      function scrollTo(id) {
+        mobileMenuOpen.value = false
+        const el = document.getElementById(id)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }
+
+      // Intersection Observer for reveal animations
+      onMounted(function () {
+        const observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible')
+                observer.unobserve(entry.target)
+              }
+            })
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        )
+
+        document.querySelectorAll('.reveal').forEach(function (el) {
+          observer.observe(el)
+        })
+      })
+
+      return { mobileMenuOpen, scrollTo }
+    }
+  }).mount('#app')
+</script>
+<script>
+;(function() {
+  var isLocal = window.location.protocol === 'file:'
+  if (isLocal) return
+  document.querySelectorAll('a[data-slug]').forEach(function(link) {
+    link.href = '/preview/' + link.dataset.slug
+  })
+})()
+</script>
+</body>
+</html>

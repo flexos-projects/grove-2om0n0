@@ -1,0 +1,815 @@
+<!--
+  Grove — Analytics Dashboard Prototype
+  Version: v1
+  Generated: 2026-03-15
+  Source spec: pages/013-route-analytics.md
+  Shared assets: prototype/shared/
+  Previous versions: none
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics — Grove</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/open-props/open-props.min.css">
+  <link rel="stylesheet" href="shared/tokens.css">
+  <link rel="stylesheet" href="shared/components.css">
+
+  <!-- Mock data -->
+  <script src="shared/mock-data-inline.js"></script>
+  <script src="shared/mock-data.js"></script>
+
+  <style>
+    .topbar-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      color: var(--color-text-primary);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .period-tabs {
+      display: flex;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .period-tab {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+    .period-tab:hover { color: var(--color-text-primary); }
+    .period-tab.active {
+      background: var(--color-brand-muted);
+      color: var(--color-brand);
+    }
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    @media (max-width: 900px) {
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+    .chart-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      box-shadow: var(--shadow-xs);
+    }
+    .chart-title {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-4);
+    }
+
+    /* Bar chart (conversations over time) */
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-2);
+      height: 160px;
+      padding-top: var(--space-2);
+    }
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .bar-fill {
+      width: 100%;
+      max-width: 36px;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      background: var(--color-brand);
+      transition: height 0.4s var(--ease-out);
+      position: relative;
+      min-height: 4px;
+    }
+    .bar-fill:hover {
+      background: var(--color-brand-hover);
+    }
+    .bar-fill::after {
+      content: attr(data-value);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+      padding-bottom: 2px;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      white-space: nowrap;
+    }
+    .bar-fill:hover::after { opacity: 1; }
+    .bar-label {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+      text-align: center;
+    }
+
+    /* Donut chart */
+    .donut-wrapper {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+    }
+    .donut {
+      width: 140px;
+      height: 140px;
+      border-radius: var(--radius-full);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .donut-hole {
+      position: absolute;
+      inset: 28px;
+      border-radius: var(--radius-full);
+      background: var(--color-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .donut-hole-value {
+      font-size: var(--text-xl);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-primary);
+      line-height: 1;
+    }
+    .donut-hole-label {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+      margin-top: 2px;
+    }
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      flex: 1;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+    }
+    .legend-count {
+      margin-left: auto;
+      font-weight: var(--weight-medium);
+      color: var(--color-text-primary);
+    }
+
+    /* Horizontal bar chart */
+    .h-bar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .h-bar-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .h-bar-label {
+      width: 70px;
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .h-bar-track {
+      flex: 1;
+      height: 20px;
+      background: var(--color-surface-sunken);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+    }
+    .h-bar-fill {
+      height: 100%;
+      background: var(--color-brand);
+      border-radius: var(--radius-sm);
+      transition: width 0.5s var(--ease-out);
+      min-width: 2px;
+    }
+    .h-bar-count {
+      width: 30px;
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+      flex-shrink: 0;
+    }
+
+    /* Heatmap */
+    .heatmap-container {
+      overflow-x: auto;
+    }
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: 40px repeat(24, 1fr);
+      gap: 2px;
+      min-width: 500px;
+    }
+    .heatmap-header {
+      font-size: 9px;
+      color: var(--color-text-tertiary);
+      text-align: center;
+      padding: 2px 0;
+    }
+    .heatmap-day-label {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 4px;
+    }
+    .heatmap-cell {
+      aspect-ratio: 1;
+      border-radius: 2px;
+      min-height: 12px;
+      transition: opacity var(--transition-fast);
+      position: relative;
+    }
+    .heatmap-cell:hover {
+      outline: 1px solid var(--color-brand-hover);
+    }
+    .heatmap-cell::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: var(--color-text-primary);
+      background: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 2px 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-fast);
+      z-index: 10;
+    }
+    .heatmap-cell:hover::after { opacity: 1; }
+
+    .staff-section {
+      margin-top: var(--space-2);
+    }
+    .staff-section .chart-title {
+      margin-bottom: var(--space-4);
+    }
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .sidebar-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--color-brand-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: var(--color-brand);
+      flex-shrink: 0;
+    }
+    .sidebar-user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-user-name {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-primary);
+    }
+    .sidebar-user-badge {
+      font-size: var(--text-xs);
+      color: var(--color-accent);
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+<div id="app" class="app-layout">
+  <!-- Sidebar -->
+  <aside class="app-sidebar">
+    <div class="sidebar-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-brand)"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span>Grove</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a data-slug="inbox" href="inbox-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Inbox
+        <span class="nav-badge" id="unread-badge"></span>
+      </a>
+      <a data-slug="guests" href="guests-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Guests
+      </a>
+      <a data-slug="knowledge" href="knowledge-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Knowledge
+      </a>
+      <a data-slug="analytics" href="analytics-v1.html" class="nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        Analytics
+      </a>
+      <a data-slug="settings" href="settings-v1.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">MC</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Maria Chen</div>
+          <div class="sidebar-user-badge">Professional</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="app-main">
+    <div class="app-topbar">
+      <span class="topbar-title">Analytics</span>
+    </div>
+    <div class="app-content">
+      <!-- Populated content -->
+      <div id="analytics-content">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="page-title">Analytics</h1>
+          <div class="header-actions">
+            <div class="period-tabs" id="period-tabs">
+              <button class="period-tab" data-period="7d">7d</button>
+              <button class="period-tab active" data-period="30d">30d</button>
+              <button class="period-tab" data-period="90d">90d</button>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="export-btn">Export CSV</button>
+          </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="stats-bar"></div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+          <!-- Conversations over time -->
+          <div class="chart-card">
+            <div class="chart-title">Conversations Over Time</div>
+            <div class="bar-chart" id="conv-chart"></div>
+          </div>
+
+          <!-- Request categories donut -->
+          <div class="chart-card">
+            <div class="chart-title">Request Categories</div>
+            <div class="donut-wrapper" id="donut-wrapper"></div>
+          </div>
+
+          <!-- Response time distribution -->
+          <div class="chart-card">
+            <div class="chart-title">Response Time Distribution</div>
+            <div class="h-bar-chart" id="response-chart"></div>
+          </div>
+
+          <!-- Busiest hours heatmap -->
+          <div class="chart-card">
+            <div class="chart-title">Busiest Hours</div>
+            <div class="heatmap-container" id="heatmap-container"></div>
+          </div>
+        </div>
+
+        <!-- Staff Performance -->
+        <div class="staff-section">
+          <div class="chart-title">Staff Performance</div>
+          <div class="table-wrapper" id="staff-table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Conversations Handled</th>
+                  <th>Avg Response Time</th>
+                </tr>
+              </thead>
+              <tbody id="staff-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <div class="empty-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </div>
+        <h2 class="empty-title">Not enough data yet.</h2>
+        <p class="empty-desc">Analytics will appear after your first 50 conversations.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Prototype label -->
+<div class="prototype-label">Analytics</div>
+
+<!-- Prototype controls -->
+<div style="position:fixed;top:12px;right:12px;z-index:9999;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-family:var(--font-ui)">
+  <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary)">PROTOTYPE</div>
+  <button onclick="toggleEmpty()" id="toggle-empty-btn" style="font-size:0.75rem;background:var(--color-surface-raised);border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:4px 10px;color:var(--color-text-secondary);cursor:pointer">Show empty state</button>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const db = window.MOCK_DB
+const helpers = db.helpers
+
+const stats = helpers.getDashboardStats(db.currentProperty.id)
+const team = helpers.getPropertyTeam(db.currentProperty.id)
+let selectedPeriod = '30d'
+
+function showToast(message, type) {
+  type = type || 'success'
+  const c = document.getElementById('toast-container')
+  const t = document.createElement('div')
+  t.className = 'toast toast-' + type
+  t.textContent = message
+  c.appendChild(t)
+  setTimeout(function() { t.remove() }, 3000)
+}
+
+// Unread badge
+const unreadCount = helpers.getPropertyConversations(db.currentProperty.id).filter(c => c.unreadByStaff).length
+if (unreadCount > 0) {
+  document.getElementById('unread-badge').textContent = unreadCount
+} else {
+  document.getElementById('unread-badge').style.display = 'none'
+}
+
+// Period tabs
+document.querySelectorAll('.period-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'))
+    this.classList.add('active')
+    selectedPeriod = this.dataset.period
+  })
+})
+
+// Export
+document.getElementById('export-btn').addEventListener('click', function() {
+  showToast('Export started.')
+})
+
+// Render stats bar
+function renderStats() {
+  const bar = document.getElementById('stats-bar')
+  bar.innerHTML = ''
+
+  const cards = [
+    { label: 'Total Conversations', value: stats.totalConversations, trend: '+12%', trendDir: 'up' },
+    { label: 'AI-Handled', value: stats.aiHandledPercent + '%', trend: '+5%', trendDir: 'up' },
+    { label: 'Avg Response Time', value: stats.avgResponseTimeMinutes + ' min', trend: '-0.8 min', trendDir: 'down' },
+    { label: 'Total Guests', value: stats.totalGuests, trend: '+' + stats.totalGuests + ', ' + stats.returningGuests + ' returning', trendDir: 'up' }
+  ]
+
+  cards.forEach(function(c) {
+    const card = document.createElement('div')
+    card.className = 'stat-card'
+
+    const label = document.createElement('div')
+    label.className = 'stat-label'
+    label.textContent = c.label
+
+    const value = document.createElement('div')
+    value.className = 'stat-value'
+    value.textContent = c.value
+
+    const trend = document.createElement('div')
+    // For avg response time, down is good (green)
+    const trendGood = (c.label === 'Avg Response Time') ? 'down' : 'up'
+    trend.className = 'stat-trend stat-trend-' + (c.trendDir === trendGood ? 'up' : 'down')
+    const arrow = c.trendDir === 'up' ? '\u2191' : '\u2193'
+    trend.textContent = arrow + ' ' + c.trend
+
+    card.appendChild(label)
+    card.appendChild(value)
+    card.appendChild(trend)
+    bar.appendChild(card)
+  })
+}
+
+// Render conversations over time bar chart
+function renderConvChart() {
+  const chart = document.getElementById('conv-chart')
+  chart.innerHTML = ''
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  // Simulated data
+  const values = [3, 5, 2, 7, 4, 1, 3]
+  const max = Math.max(...values)
+
+  days.forEach(function(day, i) {
+    const col = document.createElement('div')
+    col.className = 'bar-col'
+    const fill = document.createElement('div')
+    fill.className = 'bar-fill'
+    const pct = max > 0 ? (values[i] / max) * 100 : 0
+    fill.style.height = Math.max(pct, 4) + '%'
+    fill.setAttribute('data-value', values[i] + ' conversations')
+    const label = document.createElement('div')
+    label.className = 'bar-label'
+    label.textContent = day
+    col.appendChild(fill)
+    col.appendChild(label)
+    chart.appendChild(col)
+  })
+}
+
+// Render donut chart
+function renderDonut() {
+  const wrapper = document.getElementById('donut-wrapper')
+  wrapper.innerHTML = ''
+
+  const breakdown = stats.categoryBreakdown
+  const catColors = {
+    dining: '#D97706',
+    transport: '#3B82F6',
+    housekeeping: '#40916C',
+    activities: '#40916C',
+    information: '#78716C',
+    complaint: '#DC2626',
+    other: '#78716C'
+  }
+  const catLabels = {
+    dining: 'Dining',
+    transport: 'Transport',
+    housekeeping: 'Housekeeping',
+    activities: 'Activities',
+    information: 'Information',
+    complaint: 'Complaint',
+    other: 'Other'
+  }
+
+  const entries = Object.entries(breakdown).filter(e => e[1] > 0)
+  const total = entries.reduce((s, e) => s + e[1], 0)
+
+  // Build conic gradient
+  let gradientParts = []
+  let cumPct = 0
+  entries.forEach(function(entry) {
+    const cat = entry[0]
+    const count = entry[1]
+    const pct = (count / total) * 100
+    const color = catColors[cat] || '#78716C'
+    gradientParts.push(color + ' ' + cumPct + '% ' + (cumPct + pct) + '%')
+    cumPct += pct
+  })
+
+  const donut = document.createElement('div')
+  donut.className = 'donut'
+  donut.style.background = 'conic-gradient(' + gradientParts.join(', ') + ')'
+
+  const hole = document.createElement('div')
+  hole.className = 'donut-hole'
+  hole.innerHTML = '<div class="donut-hole-value">' + total + '</div><div class="donut-hole-label">total</div>'
+  donut.appendChild(hole)
+
+  const legend = document.createElement('div')
+  legend.className = 'donut-legend'
+  entries.forEach(function(entry) {
+    const cat = entry[0]
+    const count = entry[1]
+    const pct = Math.round((count / total) * 100)
+    const item = document.createElement('div')
+    item.className = 'legend-item'
+    const dot = document.createElement('div')
+    dot.className = 'legend-dot'
+    dot.style.background = catColors[cat] || '#78716C'
+    const label = document.createElement('span')
+    label.textContent = (catLabels[cat] || cat) + ' (' + pct + '%)'
+    const countSpan = document.createElement('span')
+    countSpan.className = 'legend-count'
+    countSpan.textContent = count
+    item.appendChild(dot)
+    item.appendChild(label)
+    item.appendChild(countSpan)
+    legend.appendChild(item)
+  })
+
+  wrapper.appendChild(donut)
+  wrapper.appendChild(legend)
+}
+
+// Render response time distribution
+function renderResponseChart() {
+  const chart = document.getElementById('response-chart')
+  chart.innerHTML = ''
+
+  // Simulated data
+  const buckets = [
+    { label: '<1 min', value: 8 },
+    { label: '1-5 min', value: 12 },
+    { label: '5-15 min', value: 4 },
+    { label: '15+ min', value: 1 }
+  ]
+  const max = Math.max(...buckets.map(b => b.value))
+
+  buckets.forEach(function(b) {
+    const row = document.createElement('div')
+    row.className = 'h-bar-row'
+    const label = document.createElement('div')
+    label.className = 'h-bar-label'
+    label.textContent = b.label
+    const track = document.createElement('div')
+    track.className = 'h-bar-track'
+    const fill = document.createElement('div')
+    fill.className = 'h-bar-fill'
+    fill.style.width = (max > 0 ? (b.value / max) * 100 : 0) + '%'
+    track.appendChild(fill)
+    const count = document.createElement('div')
+    count.className = 'h-bar-count'
+    count.textContent = b.value
+    row.appendChild(label)
+    row.appendChild(track)
+    row.appendChild(count)
+    chart.appendChild(row)
+  })
+}
+
+// Render heatmap
+function renderHeatmap() {
+  const container = document.getElementById('heatmap-container')
+  container.innerHTML = ''
+
+  const grid = document.createElement('div')
+  grid.className = 'heatmap-grid'
+
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  const hourLabels = []
+  for (let h = 0; h < 24; h++) hourLabels.push(h)
+
+  // Header row: empty corner + hour labels
+  const corner = document.createElement('div')
+  corner.className = 'heatmap-header'
+  grid.appendChild(corner)
+  hourLabels.forEach(function(h) {
+    const el = document.createElement('div')
+    el.className = 'heatmap-header'
+    el.textContent = (h % 6 === 0) ? h : ''
+    grid.appendChild(el)
+  })
+
+  // Seeded random for consistent heatmap
+  function seeded(seed) {
+    return function() {
+      seed = (seed * 16807) % 2147483647
+      return (seed - 1) / 2147483646
+    }
+  }
+  const rng = seeded(42)
+
+  days.forEach(function(day) {
+    const dayLabel = document.createElement('div')
+    dayLabel.className = 'heatmap-day-label'
+    dayLabel.textContent = day
+    grid.appendChild(dayLabel)
+
+    hourLabels.forEach(function(h) {
+      const cell = document.createElement('div')
+      cell.className = 'heatmap-cell'
+      // Generate activity level based on typical hotel patterns
+      let activity = 0
+      if (h >= 7 && h <= 22) {
+        activity = rng() * 0.8
+        // Peak hours
+        if (h >= 10 && h <= 13) activity += 0.2
+        if (h >= 17 && h <= 20) activity += 0.3
+      } else {
+        activity = rng() * 0.1
+      }
+      activity = Math.min(activity, 1)
+      const convCount = Math.round(activity * 5)
+      cell.style.background = 'rgba(64, 145, 108, ' + (0.08 + activity * 0.9) + ')'
+      cell.setAttribute('data-tip', day + ' ' + h + ':00 — ' + convCount + ' conv')
+      grid.appendChild(cell)
+    })
+  })
+
+  container.appendChild(grid)
+}
+
+// Render staff table
+function renderStaffTable() {
+  const tbody = document.getElementById('staff-tbody')
+  tbody.innerHTML = ''
+
+  // Get conversations per staff
+  const convos = helpers.getPropertyConversations(db.currentProperty.id)
+  const staffStats = {}
+  team.forEach(function(member) {
+    staffStats[member.id] = { name: member.name, count: 0 }
+  })
+  convos.forEach(function(conv) {
+    if (conv.assignedToUserId && staffStats[conv.assignedToUserId]) {
+      staffStats[conv.assignedToUserId].count++
+    }
+  })
+
+  // Sort by count desc
+  const sorted = Object.values(staffStats).sort(function(a, b) { return b.count - a.count })
+
+  // Simulated response times
+  const responseTimes = [2.1, 4.3, 3.8, 5.2, 1.9]
+
+  sorted.forEach(function(s, i) {
+    const tr = document.createElement('tr')
+    const tdName = document.createElement('td')
+    tdName.textContent = s.name
+    tdName.style.fontWeight = 'var(--weight-medium)'
+    const tdCount = document.createElement('td')
+    tdCount.textContent = s.count
+    const tdTime = document.createElement('td')
+    tdTime.textContent = (responseTimes[i] || 3.0).toFixed(1) + ' min'
+    tdTime.style.color = 'var(--color-text-secondary)'
+    tr.appendChild(tdName)
+    tr.appendChild(tdCount)
+    tr.appendChild(tdTime)
+    tbody.appendChild(tr)
+  })
+}
+
+// Toggle empty
+function toggleEmpty() {
+  const content = document.getElementById('analytics-content')
+  const empty = document.getElementById('empty-state')
+  const btn = document.getElementById('toggle-empty-btn')
+  if (empty.style.display === 'none') {
+    content.style.display = 'none'
+    empty.style.display = ''
+    btn.textContent = 'Show populated'
+  } else {
+    content.style.display = ''
+    empty.style.display = 'none'
+    btn.textContent = 'Show empty state'
+  }
+}
+
+// Render everything
+renderStats()
+renderConvChart()
+renderDonut()
+renderResponseChart()
+renderHeatmap()
+renderStaffTable()
+</script>
+<script>
+;(function() {
+  var isLocal = window.location.protocol === 'file:'
+  if (isLocal) return
+  document.querySelectorAll('a[data-slug]').forEach(function(link) {
+    link.href = '/preview/' + link.dataset.slug
+  })
+})()
+</script>
+</body>
+</html>

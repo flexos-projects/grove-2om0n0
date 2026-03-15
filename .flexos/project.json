@@ -1,0 +1,8 @@
+{
+  "name": "{{project_name}}",
+  "slug": "{{project_slug}}",
+  "version": "0.1.0",
+  "themeColor": "#40916C",
+  "createdAt": "{{created_at}}",
+  "status": "active"
+}

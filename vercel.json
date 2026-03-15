@@ -1,0 +1,31 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/.flexos/prototype/landing-v1.html" },
+    { "source": "/preview", "destination": "/.flexos/prototype/landing-v1.html" },
+    { "source": "/preview/about", "destination": "/.flexos/prototype/about-v1.html" },
+    { "source": "/preview/analytics", "destination": "/.flexos/prototype/analytics-v1.html" },
+    { "source": "/preview/contact", "destination": "/.flexos/prototype/contact-v1.html" },
+    { "source": "/preview/forgot-password", "destination": "/.flexos/prototype/forgot-password-v1.html" },
+    { "source": "/preview/group", "destination": "/.flexos/prototype/group-v1.html" },
+    { "source": "/preview/group-properties", "destination": "/.flexos/prototype/group-properties-v1.html" },
+    { "source": "/preview/guest-profile", "destination": "/.flexos/prototype/guest-profile-v1.html" },
+    { "source": "/preview/guests", "destination": "/.flexos/prototype/guests-v1.html" },
+    { "source": "/preview/inbox", "destination": "/.flexos/prototype/inbox-v1.html" },
+    { "source": "/preview/knowledge", "destination": "/.flexos/prototype/knowledge-v1.html" },
+    { "source": "/preview/landing", "destination": "/.flexos/prototype/landing-v1.html" },
+    { "source": "/preview/login", "destination": "/.flexos/prototype/login-v1.html" },
+    { "source": "/preview/pricing", "destination": "/.flexos/prototype/pricing-v1.html" },
+    { "source": "/preview/reset-password", "destination": "/.flexos/prototype/reset-password-v1.html" },
+    { "source": "/preview/settings", "destination": "/.flexos/prototype/settings-v1.html" },
+    { "source": "/preview/settings/ai-voice", "destination": "/.flexos/prototype/settings-ai-voice-v1.html" },
+    { "source": "/preview/settings/billing", "destination": "/.flexos/prototype/settings-billing-v1.html" },
+    { "source": "/preview/settings/property", "destination": "/.flexos/prototype/settings-property-v1.html" },
+    { "source": "/preview/settings/quick-actions", "destination": "/.flexos/prototype/settings-quick-actions-v1.html" },
+    { "source": "/preview/settings/routing", "destination": "/.flexos/prototype/settings-routing-v1.html" },
+    { "source": "/preview/settings/team", "destination": "/.flexos/prototype/settings-team-v1.html" },
+    { "source": "/preview/signup", "destination": "/.flexos/prototype/signup-v1.html" },
+    { "source": "/preview/flexos", "destination": "/.flexos/prototype/pages/index.html" },
+    { "source": "/preview/shared/:path*", "destination": "/.flexos/prototype/shared/:path*" },
+    { "source": "/shared/:path*", "destination": "/.flexos/prototype/shared/:path*" }
+  ]
+}
